@@ -18,12 +18,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
+Route::group(['prefix' => '/v1'], function () {
 
-    Route::post('/login', 'UserController@authenticate');
+    Route::post('/login', 'App\Http\Controllers\UserController@authenticate');
 
-    Route::post('/register', 'UserController@register');
+    Route::post('/register', 'App\Http\Controllers\UserController@register');
 
-    Route::get('/logout/{api_token}', 'UserController@logout');
+    Route::get('/logout/{api_token}', 'App\Http\Controllers\UserController@logout');
 
 });

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Http\Requests;
 use JWTAuth;
 use Response;
@@ -11,6 +11,9 @@ use App\Repository\Transformers\UserTransformer;
 use \Illuminate\Http\Response as Res;
 use Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Http\Controllers\ApiController;
+
 
 
 class UserController extends Controller
@@ -19,15 +22,22 @@ class UserController extends Controller
     /**
      * @var \App\Repository\Transformers\UserTransformer
      * */
+
+     /**
+     * @var App\Http\Controllers\ApiController
+     * */
+
     protected $userTransformer;
+    protected $ApiController;
 
 
-    public function __construct(userTransformer $userTransformer)
+    public function __construct(userTransformer $userTransformer, ApiController $ApiController)
     {
-
         $this->userTransformer = $userTransformer;
+        $this->ApiController = $ApiController;
 
     }
+
 
 
     /**
@@ -51,7 +61,7 @@ class UserController extends Controller
 
         if ($validator-> fails()){
 
-            return $this->respondValidationError('Fields Validation Failed.', $validator->errors());
+            return $this->ApiController->respondValidationError('Fields Validation Failed.', $validator->errors());
 
         }
 
@@ -145,7 +155,7 @@ class UserController extends Controller
 
         if ($validator-> fails()){
 
-            return $this->respondValidationError('Fields Validation Failed.', $validator->errors());
+            return $this->ApiController->respondValidationError('Fields Validation Failed.', $validator->errors());
 
         }
 
