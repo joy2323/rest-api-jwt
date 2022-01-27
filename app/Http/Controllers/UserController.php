@@ -99,7 +99,7 @@ class UserController extends Controller
                 }
             }
             else{
-                return $this->respondWithError("Invalid Email or Password");
+                return $this->ApiController->respondWithError("Invalid Email or Password");
             }
 
         }
@@ -112,9 +112,9 @@ class UserController extends Controller
         $credentials = ['email' => $email, 'password' => $password];
 
 
-        if ( ! $token = JWTAuth::attempt($credentials)) {
+        if ( !$token = JWTAuth::attempt($credentials)) {
 
-            return $this->respondWithError("User does not exist!");
+            return $this->ApiController->respondWithError("User does not exist!");
 
         }
 
@@ -127,7 +127,7 @@ class UserController extends Controller
 
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'message' => 'Login successful!',
+            'message' => 'Registration successful!',
             'data' => $this->userTransformer->transform($user)
 
         ]);
@@ -147,7 +147,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-            'password_confirmation' => 'required|min:3'
+            'password_confirmation' => 'required|min:6'
 
         );
 
@@ -187,7 +187,9 @@ class UserController extends Controller
 
         try{
 
-            $user = JWTAuth::toUser($api_token);
+            // $user = JWTAuth::toUser($api_token);
+
+            $user = $this->jwt->User();
 
             $user->api_token = NULL;
 
