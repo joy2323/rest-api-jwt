@@ -78,8 +78,8 @@ class UserController extends Controller
 
                 try{
 
-                    $user = JWTAuth::toUser($api_token);
-
+                    // $user = JWTAuth::toUser($api_token);
+                    $user = auth()->user();
                     return $this->ApiController->respond([
 
                         'status' => 'success',
@@ -94,7 +94,7 @@ class UserController extends Controller
                     $user->api_token = NULL;
                     $user->save();
 
-                    return $this->respondInternalError("Login Unsuccessful. An error occurred while performing an action!");
+                    return $this->ApiController->respondInternalError("Login Unsuccessful. An error occurred while performing an action!");
 
                 }
             }
@@ -191,16 +191,14 @@ class UserController extends Controller
         try{
 
             // $user = JWTAuth::toUser($api_token);
+                // dd($user);
+            $user = auth()->user();
 
-            $user = $this->jwt->User();
-
-            $user->api_token = NULL;
-
-            $user->save();
+            // $user->remember_token = $api_token;
 
             JWTAuth::setToken($api_token)->invalidate();
 
-            $this->setStatusCode(Res::HTTP_OK);
+            $this->ApiController->setStatusCode(Res::HTTP_OK);
 
             return $this->ApiController->respond([
 
@@ -213,7 +211,7 @@ class UserController extends Controller
 
         }catch(JWTException $e){
 
-            return $this->respondInternalError("An error occurred while performing an action!");
+            return $this->ApiController->respondInternalError("An error occurred while performing an action!");
 
         }
 

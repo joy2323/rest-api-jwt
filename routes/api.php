@@ -24,6 +24,8 @@ Route::group(['prefix' => '/v1'], function () {
 
     Route::post('/register', 'App\Http\Controllers\UserController@register');
 
-    Route::get('/logout/{api_token}', [UserController::class, 'logout']);
+    Route::get('/logout/{api_token}', 'App\Http\Controllers\UserController@logout');
+    // Route::get('/logout/{api_token}', [UserController::class, 'logout']);
+
 
 });
