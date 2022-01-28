@@ -80,10 +80,10 @@ class UserController extends Controller
 
                     $user = JWTAuth::toUser($api_token);
 
-                    return $this->respond([
+                    return $this->ApiController->respond([
 
                         'status' => 'success',
-                        'status_code' => $this->getStatusCode(),
+                        'status_code' => $this->ApiController->getStatusCode(),
                         'message' => 'Already logged in',
                         'user' => $this->userTransformer->transform($user)
 
@@ -117,20 +117,23 @@ class UserController extends Controller
             return $this->ApiController->respondWithError("User does not exist!");
 
         }
+        else {
 
-        $user = JWTAuth::toUser($token);
+            // $user = JWTAuth::toUser($token);
+            $user = auth()->user();
 
-        $user->api_token = $token;
-        $user->save();
+            $user->remember_token = $token;
+            $user->save();
 
-        return $this->respond([
+            return $this->ApiController->respond([
 
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'message' => 'Registration successful!',
-            'data' => $this->userTransformer->transform($user)
+                'status' => 'success',
+                'status_code' => $this->ApiController->getStatusCode(),
+                'message' => 'Registration successful!',
+                'data' => $this->userTransformer->transform($user)
 
-        ]);
+            ]);
+        }
     }
 
      /**
@@ -199,10 +202,10 @@ class UserController extends Controller
 
             $this->setStatusCode(Res::HTTP_OK);
 
-            return $this->respond([
+            return $this->ApiController->respond([
 
                 'status' => 'success',
-                'status_code' => $this->getStatusCode(),
+                'status_code' => $this->ApiController->getStatusCode(),
                 'message' => 'Logout successful!',
 
             ]);
